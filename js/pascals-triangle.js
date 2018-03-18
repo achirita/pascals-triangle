@@ -1,5 +1,4 @@
 function PascalsTriangle() {
-
     var size;
     var mod;
 

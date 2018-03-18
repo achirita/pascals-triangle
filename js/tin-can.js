@@ -42,4 +42,16 @@ function TinCan(canvasId) {
         imageData = context.createImageData(width, height);
         return this;
     };
+
+    this.disableImageSmoothing = function() {
+        context.imageSmoothingEnabled = false;
+        return this;
+    };
+
+    this.saveAs = function(fileName) {
+        var anchor = document.createElement("a");
+        anchor.href = canvas.toDataURL();
+        anchor.download = fileName + ".png";
+        anchor.click();
+    }
 }

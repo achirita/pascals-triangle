@@ -1,13 +1,35 @@
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+
         <script src="js/pascals-triangle.js"></script>
         <script src="js/tin-can.js"></script>
+        <script src="js/binary-visualization.js"></script>
     </head>
     <body>
-        <canvas id="canvas" width="500" height="500"></canvas>
+        <canvas id="canvas"></canvas>
         <script>
-            //console.log(new PascalsTriangle().size(10).mod(1000).generate());
-            var tinCan = new TinCan("canvas").width(300).height(200);
+            var color1 = {
+                red: 200,
+                green: 100,
+                blue: 100,
+                alpha: 255
+            }
+
+            var color2 = {
+                red: 100,
+                green: 200,
+                blue: 100,
+                alpha: 255
+            }
+
+            new BinaryVisualization("canvas")
+                .width(window.innerWidth)
+                .height(window.innerHeight)
+                .backgroundColor(color2)
+                .foregroundColor(color1)
+                .mod(15)
+                .show();
         </script>
     </body>
 </html>
