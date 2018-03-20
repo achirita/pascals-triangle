@@ -5,14 +5,14 @@ function BinaryVisualization(canvasId) {
     var mod;
 
     this.show = function() {
-        var tinCan = new TinCan(canvasId).width(size).height(size).disableImageSmoothing();
+        var tinCan = new TinCan(canvasId).width(size).height(size);
+        tinCan.clear(backgroundColor);
         var pascal = new PascalsTriangle().size(size).mod(mod).generate();
         for(x = 0; x < size; x++) {
-            for(y = 0; y < size; y++) {
-                if(pascal[x][y] !== 0) {
+            for(y = 0; y < size - x; y++) {
+                if(pascal[x][y] === 0) {
                     tinCan.setPixel(x, y, foregroundColor);
-                } else {
-                    tinCan.setPixel(x, y, backgroundColor);
+                    tinCan.setPixel(size - x, size - y, foregroundColor);
                 }
             }
         }

@@ -3,7 +3,7 @@ function TinCan(canvasId) {
     var context = canvas.getContext("2d");
     var width = canvas.width;
     var height = canvas.height;
-    var imageData = context.createImageData(width, height);
+    var imageData = context.getImageData(0, 0, width, height);
 
     this.setPixel = function(x, y, color) {
         var index = (x + y * width) * 4;
@@ -27,8 +27,14 @@ function TinCan(canvasId) {
         context.putImageData(imageData, 0, 0);
     };
 
-    this.clear = function() {
-        imageData = context.createImageData(width, height);
+    this.clear = function(color) {
+        if(color) {
+            context.fillStyle = 'rgba(' + color.red + ', ' + color.green + ', ' + color.blue + ', ' + color.alpha + ')';
+            context.fillRect(0, 0, width, height);
+            imageData = context.getImageData(0, 0, width, height);
+        } else {
+            imageData = context.createImageData(width, height);
+        }
     };
 
     this.width = function(w) {
@@ -40,11 +46,6 @@ function TinCan(canvasId) {
     this.height = function(h) {
         canvas.height = height = h;
         imageData = context.createImageData(width, height);
-        return this;
-    };
-
-    this.disableImageSmoothing = function() {
-        context.imageSmoothingEnabled = false;
         return this;
     };
 
