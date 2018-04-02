@@ -1,16 +1,23 @@
 function BinaryVisualization(canvasId) {
+    var mod;
+    var size;
+    var data;
     var backgroundColor;
     var foregroundColor;
-    var size;
-    var mod;
 
-    this.show = function() {
-        var tinCan = new TinCan(canvasId).width(size).height(size);
+    var tinCan = new TinCan(canvasId);
+    var pascal = new PascalsTriangle();
+
+    this.generate = function () {
+        data = pascal.generate();
+        return this;
+    };
+
+    this.colorize = function() {
         tinCan.clear(backgroundColor);
-        var pascal = new PascalsTriangle().size(size).mod(mod).generate();
         for(x = 0; x < size; x++) {
             for(y = 0; y < size - x; y++) {
-                if(pascal[x][y] === 0) {
+                if(data[x][y] === 0) {
                     tinCan.setPixel(x, y, foregroundColor);
                     tinCan.setPixel(size - x, size - y, foregroundColor);
                 }
@@ -30,12 +37,15 @@ function BinaryVisualization(canvasId) {
     };
 
     this.size = function (s) {
-      size = s;
-      return this;
+        size = s;
+        tinCan.width(size).height(size);
+        pascal.size(size);
+        return this;
     };
 
     this.mod = function(m) {
         mod = m;
+        pascal.mod(mod);
         return this;
     };
 }

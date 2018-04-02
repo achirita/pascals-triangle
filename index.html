@@ -2,6 +2,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="css/style.css">
 
+        <script src="js/lib/dat.gui.min.js"></script>
         <script src="js/pascals-triangle.js"></script>
         <script src="js/tin-can.js"></script>
         <script src="js/binary-visualization.js"></script>
@@ -9,26 +10,52 @@
     <body>
         <canvas id="canvas"></canvas>
         <script>
-            var color1 = {
-                red: 200,
-                green: 100,
-                blue: 100,
-                alpha: 255
-            }
+            var config = {
+                size: Math.min(window.innerWidth, window.innerHeight),
+                mod: 16,
+                background: [147, 130, 127],
+                foreground: [53, 206, 141],
+                visualization: new BinaryVisualization("canvas"),
+                previous: function () {
+                    if(this.mod > 2) {
+                        this.visualization.mod(--this.mod).generate().colorize();
+                    }
+                },
+                next: function () {
+                    this.visualization.mod(++this.mod).generate().colorize();
+                }
+            };
 
-            var color2 = {
-                red: 100,
-                green: 200,
-                blue: 100,
-                alpha: 255
-            }
+            config.visualization.size(config.size)
+                .mod(config.mod)
+                .backgroundColor(config.background)
+                .foregroundColor(config.foreground)
+                .generate()
+                .colorize();
 
-            new BinaryVisualization("canvas")
-                .backgroundColor(color1)
-                .foregroundColor(color2)
-                .size(Math.min(window.innerWidth, window.innerHeight))
-                .mod(16)
-                .show();
+            document.body.style.backgroundColor = 'rgb(' + config.background[0] + ', ' + config.background[1] + ', ' + config.background[2] + ')';
+
+            var gui = new dat.GUI();
+            var bgController = gui.addColor(config, "background");
+            var fgController = gui.addColor(config, "foreground");
+            var modController = gui.add(config, "mod").min(2).step(1).listen();
+            gui.add(config, "previous");
+            gui.add(config, "next");
+
+
+            bgController.onChange(function (value) {
+                document.body.style.backgroundColor = 'rgb(' + (value[0] | 0) + ', ' + (value[1] | 0) + ', ' + (value[2] | 0) + ')';
+                this.object.visualization.backgroundColor(value).colorize();
+            });
+
+            fgController.onChange(function (value) {
+                this.object.visualization.foregroundColor(value).colorize();
+            });
+
+            modController.onChange(function (value) {
+                this.object.visualization.mod(value).generate().colorize();
+            });
+
         </script>
     </body>
 </html>
